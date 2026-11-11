@@ -1,0 +1,14 @@
+{
+  "port": 3737,
+  "minichatUrl": "ws://localhost:4848/Chat",
+  "overlayDisplay": 0,
+  "maxConcurrent": 3,
+  "hotkeys": {
+    "panic": "CommandOrControl+Shift+F12",
+    "toggle": "CommandOrControl+Shift+F11",
+    "exerciseRep": "CommandOrControl+Shift+F10",
+    "exerciseStart": "CommandOrControl+Shift+F9"
+  },
+  "camera": "",
+  "currencyToRub": { "RUB": 1, "USD": 90, "EUR": 100, "UAH": 2.2, "KZT": 0.18, "BYN": 28 }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Cyberpunk 2077",
+  "note": "Вариант «Мод» работает через Cyber Engine Tweaks (у тебя он уже установлен).",
+  "allowInput": false,
+  "connection": { "gameDir": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Cyberpunk 2077" },
+  "mod": {
+    "requiresName": "Cyber Engine Tweaks",
+    "bridge": "bin/x64/plugins/cyber_engine_tweaks/mods/stream_interactive/commands.txt",
+    "ownDir": "bin/x64/plugins/cyber_engine_tweaks/mods/stream_interactive",
+    "files": [ { "from": "mods/cyberpunk/stream_interactive/init.lua", "to": "bin/x64/plugins/cyber_engine_tweaks/mods/stream_interactive/init.lua", "requires": "bin/x64/plugins/cyber_engine_tweaks" } ]
+  },
+  "variants": {
+    "overlay": { "title": "Только экран", "description": "Помехи поверх игры, в саму игру ничего не идёт.", "use": ["overlay-hard", "social"] },
+    "fitness": { "title": "Физкульт", "description": "Донат от 200₽ закрывает экран, пока камера не насчитает отжимания или приседания (40₽ = 1 отжимание). Донаты меньше 200₽ дают лёгкие помехи.", "use": ["fitness", "overlay-soft", "social"] },
+
+    "mod": {
+      "title": "Мод",
+      "description": "Lua-мод для Cyber Engine Tweaks: опьянение, огонь, телепорт в небо, замедление, погода, деньги.",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 }, { "type": "mod", "command": "message", "arg": "{user}: {amount}" } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "mod", "command": "status", "arg": "BaseStatusEffect.Drunk", "duration": 30, "revert": { "command": "unstatus", "arg": "BaseStatusEffect.Drunk" }, "label": "🍺 {user}: Ви пьян 30 с" } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "mod", "command": "weather", "arg": "24h_weather_toxic_rain", "label": "☣️ {user}: кислотный дождь" } ] },
+        { "event": "donation", "min": 200,  "effects": [ { "type": "mod", "command": "status", "arg": "BaseStatusEffect.Blind", "duration": 10, "revert": { "command": "unstatus", "arg": "BaseStatusEffect.Blind" }, "label": "🙈 {user}: ослепление" } ] },
+        { "event": "donation", "min": 250,  "effects": [ { "type": "mod", "command": "heal", "label": "💚 {user}: лечение" } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "mod", "command": "status", "arg": "BaseStatusEffect.Burning", "label": "🔥 {user}: Ви горит" } ] },
+        { "event": "donation", "min": 400,  "effects": [ { "type": "mod", "command": "steal", "arg": "5000", "label": "💸 {user}: минус 5000 эдди" } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "mod", "command": "skyfall", "label": "🪂 {user}: в небо!" } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "mod", "command": "slowmo", "arg": "0.3", "duration": 20, "revert": { "command": "slowmo", "arg": "0" }, "label": "🐌 {user}: замедление 20 с" } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "mod", "command": "status", "arg": "BaseStatusEffect.Knockdown", "label": "💥 {user}: нокдаун + ЭМИ" }, { "type": "mod", "command": "status", "arg": "BaseStatusEffect.EMP" } ] },
+        { "event": "donation", "min": 2000, "effects": [ { "type": "mod", "command": "time", "arg": "0", "label": "🌃 {user}: полночь и пожар" }, { "type": "mod", "command": "status", "arg": "BaseStatusEffect.Burning" }, { "type": "screenfx", "mode": "drunk", "duration": 20 } ] },
+        { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "mod", "command": "money", "arg": "10000", "label": "💰 {user}: +10 000 эдди" } ] }
+      ]
+    }
+  }
+}

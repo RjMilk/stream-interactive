@@ -1,0 +1,17 @@
+{
+  "name": "stream-interactive",
+  "version": "0.1.0",
+  "description": "Донаты/фоллоу/сабы/рейды из MiniChat -> помехи поверх игры у стримера",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron ."
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.2.2",
+    "ws": "8.18.0"
+  },
+  "devDependencies": {
+    "electron": "33.2.1"
+  }
+}

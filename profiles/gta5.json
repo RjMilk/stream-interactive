@@ -1,0 +1,60 @@
+{
+  "name": "GTA 5 (сюжет)",
+  "note": "Только сюжетный режим. В GTA Online чит-коды не работают, а за моды банят.",
+  "allowInput": true,
+  "window": "Grand Theft Auto V",
+  "connection": { "gameDir": "" },
+  "mod": {
+    "requiresName": "ScriptHookV + ScriptHookVDotNet v3",
+    "bridge": "scripts/stream_interactive_commands.txt",
+    "files": [ { "from": "mods/gta5/StreamInteractive.cs", "to": "scripts/StreamInteractive.cs", "requires": "ScriptHookVDotNet.asi" } ]
+  },
+  "variants": {
+    "overlay": { "title": "Только экран", "description": "Помехи поверх игры, в саму игру ничего не идёт.", "use": ["overlay-hard", "social"] },
+    "fitness": { "title": "Физкульт", "description": "Донат от 200₽ закрывает экран, пока камера не насчитает отжимания или приседания (40₽ = 1 отжимание). Донаты меньше 200₽ дают лёгкие помехи.", "use": ["fitness", "overlay-soft", "social"] },
+
+    "cheats": {
+      "title": "Чит-коды",
+      "description": "Программа сама вводит чит-коды GTA (~, код, Enter). Модов не нужно. Нужна английская раскладка, окно игры должно быть активным.",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 } ] },
+        { "event": "donation", "min": 50,   "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "LIQUOR",   "label": "🍺 {user}: пьяный режим" } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "FUGITIVE", "label": "🚓 {user}: +1 звезда розыска" } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "TURTLE",   "label": "💚 {user}: здоровье и броня" } ] },
+        { "event": "donation", "min": 200,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "SNOWDAY",  "label": "🧊 {user}: скользкие машины" } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "SLOWMO",   "label": "🐌 {user}: замедление" } ] },
+        { "event": "donation", "min": 400,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "FUGITIVE", "repeat": 3, "label": "🚓 {user}: +3 звезды розыска" } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "SKYFALL",  "label": "🪂 {user}: падение с неба" } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "FLOATER",  "label": "🌙 {user}: лунная гравитация" } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "keys", "preset": "gta5-cheat", "text": "FUGITIVE", "repeat": 5, "label": "🚨 {user}: 5 звёзд розыска" }, { "type": "flashbang", "duration": 3 } ] }
+      ]
+    },
+
+    "mod": {
+      "title": "Мод",
+      "description": "Скрипт ScriptHookVDotNet выполняет команды прямо в игре: розыск, враги, взрывы, транспорт. Самый сильный вариант.",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 } ] },
+        { "event": "donation", "min": 50,   "effects": [ { "type": "mod", "command": "ragdoll", "label": "🤸 {user}: подножка" } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "mod", "command": "wanted", "arg": "2", "label": "🚓 {user}: розыск 2★" } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "mod", "command": "heal", "label": "💚 {user}: лечение и броня" } ] },
+        { "event": "donation", "min": 200,  "effects": [ { "type": "mod", "command": "tires", "label": "🛞 {user}: лопнули шины" } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "mod", "command": "attackers", "arg": "3", "label": "🔫 {user}: наёмные убийцы ×3" } ] },
+        { "event": "donation", "min": 400,  "effects": [ { "type": "mod", "command": "drunk", "arg": "1", "duration": 30, "revert": { "command": "drunk", "arg": "0" }, "label": "🍺 {user}: пьяный на 30 с" } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "mod", "command": "wanted", "arg": "4", "label": "🚓 {user}: розыск 4★" } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "mod", "command": "explode", "label": "💥 {user}: взрыв рядом" } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "mod", "command": "skyfall", "label": "🪂 {user}: в небо!" } ] },
+        { "event": "donation", "min": 1500, "effects": [ { "type": "mod", "command": "vehicle", "arg": "rhino", "label": "🛡️ {user}: танк" }, { "type": "mod", "command": "wanted", "arg": "5" } ] },
+        { "event": "donation", "min": 2000, "random": true, "effects": [
+            { "type": "mod", "command": "disarm", "label": "🫳 {user}: оружие отобрано" },
+            { "type": "mod", "command": "gravity", "arg": "1", "duration": 30, "revert": { "command": "gravity", "arg": "0" }, "label": "🌙 {user}: лунная гравитация 30 с" },
+            { "type": "mod", "command": "attackers", "arg": "8", "label": "🔫 {user}: наёмные убийцы ×8" }
+        ] },
+        { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "mod", "command": "money", "arg": "50000", "label": "💰 {user}: +50 000$" } ] },
+        { "event": "raid", "effects": [ { "type": "banner", "title": "⚔️ РЕЙД", "duration": 6 }, { "type": "mod", "command": "attackers", "arg": "10", "label": "⚔️ Рейд {user}: 10 врагов" } ] }
+      ]
+    }
+  }
+}

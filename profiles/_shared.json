@@ -1,0 +1,80 @@
+{
+  "social": [
+    { "event": "follow",       "cooldown": 20, "effects": [ { "type": "rain", "emoji": "❤️", "count": 25, "duration": 5 } ] },
+    { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "ink", "duration": 10 } ] },
+    { "event": "raid",         "effects": [ { "type": "banner", "title": "⚔️ РЕЙД", "duration": 6 }, { "type": "cracks", "duration": 15 }, { "type": "rain", "emoji": "🪖", "count": 80, "duration": 8 } ] }
+  ],
+
+  "fitness": [
+    { "event": "donation", "min": 200,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "exercise", "exercise": "pushups", "per": 40, "max": 30 } ] },
+    { "event": "donation", "min": 500,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "exercise", "exercise": "squats", "per": 50, "max": 40 } ] },
+    { "event": "donation", "min": 1000, "random": true, "effects": [
+        { "type": "exercise", "exercise": "pushups", "per": 50, "max": 40 },
+        { "type": "exercise", "exercise": "squats", "per": 40, "max": 50 }
+    ] }
+  ],
+
+  "fitness-deferred": [
+    { "event": "donation", "min": 200,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "exercise", "exercise": "pushups", "per": 40, "max": 30, "deferred": true } ] },
+    { "event": "donation", "min": 500,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "exercise", "exercise": "squats", "per": 50, "max": 40, "deferred": true } ] },
+    { "event": "donation", "min": 1000, "random": true, "effects": [
+        { "type": "exercise", "exercise": "pushups", "per": 50, "max": 40, "deferred": true },
+        { "type": "exercise", "exercise": "squats", "per": 40, "max": 50, "deferred": true }
+    ] }
+  ],
+
+  "overlay-soft": [
+    { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 } ] },
+    { "event": "donation", "min": 100,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "crosshair", "emoji": "🐔", "duration": 8 } ] },
+    { "event": "donation", "min": 300,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "rain", "emoji": "💸", "count": 120, "duration": 8 } ] },
+    { "event": "donation", "min": 500,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "smoke", "duration": 10 } ] },
+    { "event": "donation", "min": 1000, "effects": [ { "type": "banner", "duration": 4 }, { "type": "flashbang", "duration": 5 } ] },
+    { "event": "donation", "min": 2000, "effects": [ { "type": "banner", "duration": 4 }, { "type": "tunnel", "duration": 15 } ] }
+  ],
+
+  "overlay-hard": [
+    { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 5 } ] },
+    { "event": "donation", "min": 100,  "effects": [ { "type": "banner", "duration": 5 }, { "type": "crosshair", "emoji": "🐔", "duration": 10 } ] },
+    { "event": "donation", "min": 200,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "screenfx", "mode": "gray", "duration": 15 } ] },
+    { "event": "donation", "min": 300,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "smoke", "duration": 15 } ] },
+    { "event": "donation", "min": 500,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "flashbang", "duration": 7 } ] },
+    { "event": "donation", "min": 700,  "effects": [ { "type": "banner", "duration": 4 }, { "type": "screenfx", "mode": "mirror", "duration": 15 } ] },
+    { "event": "donation", "min": 1000, "effects": [ { "type": "banner", "duration": 4 }, { "type": "screenfx", "mode": "flip", "duration": 20 } ] },
+    { "event": "donation", "min": 1500, "effects": [ { "type": "banner", "duration": 4 }, { "type": "tunnel", "duration": 20 } ] },
+    { "event": "donation", "min": 2000, "random": true, "effects": [
+        { "type": "screenfx", "mode": "drunk", "duration": 30 },
+        { "type": "screenfx", "mode": "flip", "duration": 30 },
+        { "type": "screenfx", "mode": "tiny", "duration": 25 },
+        { "type": "ink", "duration": 25 }
+    ] },
+    { "event": "donation", "min": 3000, "effects": [ { "type": "banner", "duration": 4 }, { "type": "screenfx", "mode": "blur", "duration": 20 }, { "type": "cracks", "duration": 20 } ] }
+  ],
+
+  "overlay-chaos": [
+    { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 } ] },
+    { "event": "donation", "min": 50,   "random": true, "effects": [
+        { "type": "crosshair", "emoji": "🐔", "duration": 10 },
+        { "type": "crosshair", "emoji": "🗿", "duration": 10 },
+        { "type": "smoke", "duration": 10 },
+        { "type": "ink", "duration": 10 },
+        { "type": "cracks", "duration": 10 },
+        { "type": "screenfx", "mode": "gray", "duration": 10 },
+        { "type": "screenfx", "mode": "invert", "duration": 10 },
+        { "type": "rain", "emoji": "💩", "count": 100, "duration": 10 }
+    ] },
+    { "event": "donation", "min": 500,  "random": true, "effects": [
+        { "type": "flashbang", "duration": 7 },
+        { "type": "tunnel", "duration": 20 },
+        { "type": "screenfx", "mode": "mirror", "duration": 20 },
+        { "type": "screenfx", "mode": "zoom", "duration": 20 },
+        { "type": "screenfx", "mode": "freeze", "duration": 4 },
+        { "type": "screenfx", "mode": "blur", "duration": 15 }
+    ] },
+    { "event": "donation", "min": 1500, "random": true, "effects": [
+        { "type": "screenfx", "mode": "flip", "duration": 30 },
+        { "type": "screenfx", "mode": "drunk", "duration": 30 },
+        { "type": "screenfx", "mode": "tiny", "duration": 30 },
+        { "type": "tunnel", "radius": 9, "duration": 30 }
+    ] }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Minecraft (Java)",
+  "note": "RCON — для своего сервера. «Команды в чат» — для одиночной игры с включёнными читами.",
+  "allowInput": true,
+  "window": "Minecraft",
+  "connection": {
+    "rcon": { "host": "127.0.0.1", "port": 25575, "password": "" },
+    "rconTest": "list"
+  },
+  "variants": {
+    "overlay": { "title": "Только экран", "description": "Помехи поверх игры, в саму игру ничего не идёт.", "use": ["overlay-hard", "social"] },
+    "fitness": { "title": "Физкульт", "description": "Донат от 200₽ закрывает экран, пока камера не насчитает отжимания или приседания (40₽ = 1 отжимание). Донаты меньше 200₽ дают лёгкие помехи.", "use": ["fitness", "overlay-soft", "social"] },
+
+    "rcon": {
+      "title": "RCON (сервер)",
+      "description": "Команды уходят на твой сервер Minecraft по RCON и действуют на всех игроков (@a).",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 }, { "type": "rcon", "commands": [ "title @a actionbar {\"text\":\"{user} задонатил {amount}\",\"color\":\"gold\"}" ] } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "rcon", "label": "🧟 {user}: зомби", "commands": [ "execute at @a run summon zombie ~2 ~ ~2", "execute at @a run summon zombie ~-2 ~ ~2" ] } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "rcon", "label": "🍎 {user}: золотые яблоки", "commands": [ "give @a golden_apple 3" ] } ] },
+        { "event": "donation", "min": 200,  "effects": [ { "type": "rcon", "label": "🙈 {user}: слепота 20 с", "commands": [ "effect give @a blindness 20 0" ] } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "rcon", "label": "💚 {user}: крипер", "commands": [ "execute at @a run summon creeper ~3 ~ ~" ] } ] },
+        { "event": "donation", "min": 400,  "effects": [ { "type": "rcon", "label": "🥴 {user}: тошнота и замедление", "commands": [ "effect give @a nausea 20 0", "effect give @a slowness 20 2" ] } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "rcon", "label": "⚡ {user}: молния", "commands": [ "execute at @a run summon lightning_bolt ~ ~ ~" ] }, { "type": "flashbang", "duration": 2 } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "rcon", "label": "🪂 {user}: в небо!", "commands": [ "effect give @a slow_falling 12 0", "execute as @a at @s run tp @s ~ ~80 ~" ] } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "rcon", "label": "🧨 {user}: динамит ×3", "commands": [ "execute at @a run summon tnt ~2 ~ ~ {fuse:60}", "execute at @a run summon tnt ~-2 ~ ~ {fuse:60}", "execute at @a run summon tnt ~ ~ ~2 {fuse:60}" ] } ] },
+        { "event": "donation", "min": 2000, "effects": [ { "type": "rcon", "label": "👹 {user}: Варден", "commands": [ "execute at @a run summon warden ~4 ~ ~4" ] } ] },
+        { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "rcon", "label": "💎 {user}: алмазы", "commands": [ "give @a diamond 5" ] } ] },
+        { "event": "raid", "effects": [ { "type": "banner", "title": "⚔️ РЕЙД", "duration": 6 }, { "type": "rcon", "label": "⚔️ Рейд {user}: орда зомби", "commands": [ "execute at @a run summon zombie ~3 ~ ~", "execute at @a run summon zombie ~-3 ~ ~", "execute at @a run summon zombie ~ ~ ~3", "execute at @a run summon zombie ~ ~ ~-3", "execute at @a run summon skeleton ~4 ~ ~4", "execute at @a run summon skeleton ~-4 ~ ~-4" ] } ] }
+      ]
+    },
+
+    "keys": {
+      "title": "Команды в чат",
+      "description": "Программа сама открывает чат и вводит команду. Для одиночного мира с читами. Окно игры должно быть активным, меню и инвентарь закрыты.",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "summon zombie ~2 ~ ~2", "repeat": 2, "label": "🧟 {user}: зомби" } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "give @s golden_apple 3", "label": "🍎 {user}: золотые яблоки" } ] },
+        { "event": "donation", "min": 200,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "effect give @s blindness 20 0", "label": "🙈 {user}: слепота 20 с" } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "summon creeper ~3 ~ ~", "label": "💚 {user}: крипер" } ] },
+        { "event": "donation", "min": 400,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "effect give @s nausea 20 0", "label": "🥴 {user}: тошнота" } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "summon lightning_bolt ~ ~ ~", "label": "⚡ {user}: молния" }, { "type": "flashbang", "duration": 2 } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "keys", "preset": "mc-command", "text": "effect give @s slow_falling 12 0", "label": "🪂 {user}: в небо!" }, { "type": "keys", "preset": "mc-command", "text": "tp @s ~ ~80 ~" } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "keys", "preset": "mc-command", "text": "summon tnt ~2 ~ ~ {fuse:60}", "repeat": 3, "label": "🧨 {user}: динамит ×3" } ] },
+        { "event": "donation", "min": 2000, "effects": [ { "type": "keys", "preset": "mc-command", "text": "summon warden ~4 ~ ~4", "label": "👹 {user}: Варден" } ] },
+        { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "keys", "preset": "mc-command", "text": "give @s diamond 5", "label": "💎 {user}: алмазы" } ] },
+        { "event": "raid", "effects": [ { "type": "banner", "title": "⚔️ РЕЙД", "duration": 6 }, { "type": "keys", "preset": "mc-command", "text": "summon zombie ~3 ~ ~", "repeat": 5, "label": "⚔️ Рейд {user}: орда зомби" } ] }
+      ]
+    }
+  }
+}

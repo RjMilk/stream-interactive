@@ -1,0 +1,45 @@
+{
+  "name": "Factorio",
+  "note": "Вариант RCON выполняет Lua-команды в игре и отключает достижения в этом сохранении.",
+  "allowInput": false,
+  "connection": {
+    "rcon": { "host": "127.0.0.1", "port": 27015, "password": "" },
+    "rconTest": "/silent-command rcon.print('Factorio ' .. game.tick)"
+  },
+  "variants": {
+    "overlay": { "title": "Только экран", "description": "Помехи поверх игры, в саму игру ничего не идёт.", "use": ["overlay-hard", "social"] },
+    "fitness": { "title": "Физкульт", "description": "Донат от 200₽ закрывает экран, пока камера не насчитает отжимания или приседания (40₽ = 1 отжимание). Донаты меньше 200₽ дают лёгкие помехи.", "use": ["fitness", "overlay-soft", "social"] },
+
+    "rcon": {
+      "title": "RCON",
+      "description": "Кусаки, темнота, замедление и подарки прямо в игре. Игру нужно запустить как сетевую с включённым RCON (см. README).",
+      "use": ["social"],
+      "rules": [
+        { "event": "donation", "min": 1,    "effects": [ { "type": "banner", "duration": 4 }, { "type": "rcon", "commands": [ "/silent-command game.print('[color=yellow]{user}[/color] задонатил {amount}')" ] } ] },
+        { "event": "donation", "min": 100,  "effects": [ { "type": "rcon", "per": 50, "max": 30, "label": "🐛 {user}: {n} мелких кусак", "commands": [
+            "/silent-command local p=game.connected_players[1] if not p then return end for i=1,{n} do local pos=p.surface.find_non_colliding_position('small-biter',{p.position.x+math.random(-18,18),p.position.y+math.random(-18,18)},12,1) if pos then p.surface.create_entity{name='small-biter',position=pos,force='enemy'} end end" ] } ] },
+        { "event": "donation", "min": 150,  "effects": [ { "type": "rcon", "label": "🎁 {user}: 200 железных плит", "commands": [
+            "/silent-command local p=game.connected_players[1] if p then p.insert{name='iron-plate',count=200} end" ] } ] },
+        { "event": "donation", "min": 300,  "effects": [ { "type": "rcon", "per": 100, "max": 20, "label": "🐛 {user}: {n} средних кусак", "commands": [
+            "/silent-command local p=game.connected_players[1] if not p then return end for i=1,{n} do local pos=p.surface.find_non_colliding_position('medium-biter',{p.position.x+math.random(-18,18),p.position.y+math.random(-18,18)},12,1) if pos then p.surface.create_entity{name='medium-biter',position=pos,force='enemy'} end end" ] } ] },
+        { "event": "donation", "min": 500,  "effects": [ { "type": "rcon", "duration": 60, "label": "🌑 {user}: ночь на 60 с",
+            "commands": [ "/silent-command local p=game.connected_players[1] if p then p.surface.freeze_daytime=true p.surface.daytime=0.5 end" ],
+            "revert":   [ "/silent-command local p=game.connected_players[1] if p then p.surface.freeze_daytime=false p.surface.daytime=0 end" ] } ] },
+        { "event": "donation", "min": 700,  "effects": [ { "type": "rcon", "duration": 45, "label": "🦥 {user}: ноги не идут 45 с",
+            "commands": [ "/silent-command local p=game.connected_players[1] if p and p.character then p.character_running_speed_modifier=-0.7 end" ],
+            "revert":   [ "/silent-command local p=game.connected_players[1] if p and p.character then p.character_running_speed_modifier=0 end" ] } ] },
+        { "event": "donation", "min": 1000, "effects": [ { "type": "rcon", "per": 200, "max": 15, "label": "🪲 {user}: {n} больших кусак", "commands": [
+            "/silent-command local p=game.connected_players[1] if not p then return end for i=1,{n} do local pos=p.surface.find_non_colliding_position('big-biter',{p.position.x+math.random(-20,20),p.position.y+math.random(-20,20)},12,1) if pos then p.surface.create_entity{name='big-biter',position=pos,force='enemy'} end end" ] } ] },
+        { "event": "donation", "min": 1500, "effects": [ { "type": "rcon", "duration": 30, "label": "🐌 {user}: игра вдвое медленнее 30 с",
+            "commands": [ "/silent-command game.speed=0.5" ],
+            "revert":   [ "/silent-command game.speed=1" ] } ] },
+        { "event": "donation", "min": 2000, "effects": [ { "type": "rcon", "label": "☁️ {user}: облако загрязнения", "commands": [
+            "/silent-command local p=game.connected_players[1] if p then p.surface.pollute(p.position, 8000) end" ] }, { "type": "smoke", "duration": 12 } ] },
+        { "event": "subscription", "effects": [ { "type": "banner", "title": "⭐ ПОДПИСКА", "duration": 5 }, { "type": "rcon", "label": "🎁 {user}: 100 микросхем", "commands": [
+            "/silent-command local p=game.connected_players[1] if p then p.insert{name='electronic-circuit',count=100} end" ] } ] },
+        { "event": "raid", "effects": [ { "type": "banner", "title": "⚔️ РЕЙД", "duration": 6 }, { "type": "rcon", "label": "⚔️ Рейд {user}: 25 кусак", "commands": [
+            "/silent-command local p=game.connected_players[1] if not p then return end for i=1,25 do local pos=p.surface.find_non_colliding_position('small-biter',{p.position.x+math.random(-20,20),p.position.y+math.random(-20,20)},12,1) if pos then p.surface.create_entity{name='small-biter',position=pos,force='enemy'} end end" ] } ] }
+      ]
+    }
+  }
+}

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Stream Interactive — панель</title>
+<style>
+  :root { --bg: #14141c; --card: #1f1f2b; --fg: #e9e9f1; --mut: #9a9ab0; --acc: #ff2f86; --ok: #2ecc71; --bad: #e74c3c; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 14px "Segoe UI", Arial, sans-serif; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .card { background: var(--card); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--mut); margin: 0 0 10px; }
+  button { background: #33334a; color: var(--fg); border: 0; border-radius: 8px; padding: 9px 14px; font: inherit; cursor: pointer; white-space: nowrap; }
+  button:hover { background: #44445f; }
+  button.acc, button.on { background: var(--acc); }
+  button.bad { background: var(--bad); }
+  button.sm { padding: 4px 10px; }
+  input { background: #111118; color: var(--fg); border: 1px solid #333; border-radius: 8px; padding: 8px 10px; font: inherit; }
+  .pill { padding: 4px 10px; border-radius: 99px; font-size: 12px; background: #333; }
+  .pill.ok { background: var(--ok); color: #000; } .pill.bad { background: var(--bad); }
+  #log { height: 200px; overflow: auto; font: 12px Consolas, monospace; white-space: pre-wrap; background: #0d0d13; border-radius: 8px; padding: 8px; }
+  .hint { color: var(--mut); font-size: 12px; margin-top: 8px; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 5px 8px; border-top: 1px solid #2c2c3c; vertical-align: middle; }
+  td:first-child { white-space: nowrap; color: var(--mut); width: 1%; }
+  td:last-child { width: 1%; }
+  #rules { max-height: 300px; overflow: auto; }
+</style>
+</head>
+<body>
+<h1>🎮 Stream Interactive</h1>
+
+<div class="card row">
+  MiniChat: <span id="mc" class="pill">…</span>
+  Помехи: <span id="en" class="pill">…</span>
+  <span style="flex:1"></span>
+  <button onclick="post('/api/toggle')">Пауза / вкл (Ctrl+Shift+F11)</button>
+  <button class="bad" onclick="post('/api/clear')">🧯 Убрать всё (Ctrl+Shift+F12)</button>
+  <button onclick="post('/api/reload')">↻ Перечитать настройки</button>
+</div>
+
+<div class="card">
+  <h2>Игра</h2>
+  <div class="row" id="games"></div>
+  <div class="hint" id="note"></div>
+  <h2 style="margin-top:14px">Вариант исполнения</h2>
+  <div class="row" id="variants"></div>
+  <div class="hint" id="vdesc"></div>
+  <div class="row" id="tools" style="margin-top:10px"></div>
+</div>
+
+<div class="card">
+  <h2>Реакции выбранного варианта</h2>
+  <div id="rules"><table id="rt"></table></div>
+</div>
+
+<div class="card">
+  <h2>Симуляция событий</h2>
+  <div class="row">
+    <input id="user" value="ТестовыйЗритель" size="16">
+    <input id="amount" type="number" value="100" style="width:90px"> ₽
+    <input id="msg" value="Привет, держи помеху!" size="26">
+    <button class="acc" onclick="sim('donation')">💸 Донат</button>
+    <button onclick="sim('follow')">❤️ Фоллоу</button>
+    <button onclick="sim('subscription')">⭐ Подписка</button>
+    <button onclick="sim('raid', 42)">⚔️ Рейд</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Отдельные помехи экрана</h2>
+  <div class="row" id="fx"></div>
+</div>
+
+<div class="card">
+  <h2>Физические челленджи</h2>
+  <div class="row">
+    <button class="acc" onclick="post('/api/effect', { type: 'exercise', exercise: 'pushups', count: 3 })">💪 Тест: 3 отжимания</button>
+    <button class="acc" onclick="post('/api/effect', { type: 'exercise', exercise: 'squats', count: 3 })">🦵 Тест: 3 приседания</button>
+    <button onclick="ex('rep')">+1 повтор вручную (Ctrl+Shift+F10)</button>
+    <button onclick="ex('skip')">Снять челлендж</button>
+    <button onclick="ex('start')">Отработать долг (Ctrl+Shift+F9)</button>
+    <button onclick="ex('forgive')">Списать долг</button>
+  </div>
+  <div class="hint" id="exstate">Сейчас челленджа нет.</div>
+  <div class="row" style="margin-top:10px">
+    Камера: <span id="cam" class="pill">по умолчанию</span>
+    <button onclick="findCameras()">📷 Найти камеры</button>
+    <span class="row" id="cams"></span>
+  </div>
+  <div class="hint">Телефон как камера: подключи его (Связь с телефоном, DroidCam, Iriun, Camo), нажми «Найти камеры» и выбери его в списке. Ставь телефон сбоку, чтобы в кадр попадало всё тело.</div>
+</div>
+
+<div class="card">
+  <h2>Лог</h2>
+  <div id="log"></div>
+  <div class="hint">OBS (если захват игры, а не экрана): Browser Source → http://127.0.0.1:3737/overlay.html?mode=obs, 1920×1080.</div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const post = (url, body) => fetch(url, { method: 'POST', body: JSON.stringify(body || {}) });
+const sim = (type, amount) => post('/api/simulate', { type, user: $('user').value, amount: amount ?? Number($('amount').value), currency: 'RUB', message: $('msg').value });
+const EVENT = { donation: 'донат', follow: 'фоллоу', subscription: 'подписка', raid: 'рейд' };
+
+function btn(text, onclick, cls) {
+  const b = document.createElement('button');
+  b.textContent = text;
+  b.onclick = onclick;
+  if (cls) b.className = cls;
+  return b;
+}
+
+const FX = ['banner', 'crosshair', 'smoke', 'flashbang', 'tunnel', 'ink', 'cracks', 'rain'];
+const SCREENFX = ['flip', 'mirror', 'gray', 'invert', 'blur', 'zoom', 'tiny', 'drunk', 'freeze'];
+FX.forEach((t) => $('fx').appendChild(btn(t, () => post('/api/effect', { type: t, duration: 6 }))));
+SCREENFX.forEach((m) => $('fx').appendChild(btn('экран: ' + m, () => post('/api/effect', { type: 'screenfx', mode: m, duration: m === 'freeze' ? 3 : 6 }))));
+
+// ---------- Физические челленджи ----------
+const ex = (cmd) => post('/api/exercise', { cmd });
+const EX_WORDS = { pushups: 'отжимания', squats: 'приседания' };
+
+// Показывает текущий челлендж и долг (приходит от окна оверлея через сервер)
+function renderExercise(st) {
+  const debt = Object.entries(st.debt || {}).filter(([, n]) => n > 0).map(([k, n]) => `${n} ${EX_WORDS[k]}`).join(' + ');
+  const cur = st.cur ? `Идёт: ${EX_WORDS[st.cur.kind]} ${st.cur.done}/${st.cur.total}${st.cur.user ? ' от ' + st.cur.user : ''}.` : 'Сейчас челленджа нет.';
+  $('exstate').textContent = cur + (debt ? ` Долг: ${debt}.` : '');
+}
+
+// Список камер. Разрешение на камеру нужно, чтобы система отдала их названия.
+async function findCameras() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    stream.getTracks().forEach((t) => t.stop());
+    const cams = (await navigator.mediaDevices.enumerateDevices()).filter((d) => d.kind === 'videoinput' && d.label);
+    $('cams').replaceChildren(btn('по умолчанию', () => post('/api/camera', { label: '' }), 'sm'),
+      ...cams.map((d) => btn(d.label, () => post('/api/camera', { label: d.label }), 'sm')));
+    if (!cams.length) addLog('Камеры не найдены');
+  } catch (e) {
+    addLog('Камера недоступна: ' + e.message);
+  }
+}
+
+function render(s) {
+  if ('camera' in s) $('cam').textContent = s.camera || 'по умолчанию';
+  if ('enabled' in s) { $('en').textContent = s.enabled ? 'включены' : 'пауза'; $('en').className = 'pill ' + (s.enabled ? 'ok' : 'bad'); }
+  if (s.minichat) { $('mc').textContent = s.minichat; $('mc').className = 'pill ' + (s.minichat === 'подключено' ? 'ok' : 'bad'); }
+  if (!s.profiles) return;
+
+  const cur = s.profiles.find((p) => p.id === s.profile);
+  $('games').replaceChildren(...s.profiles.map((p) => btn(p.name, () => post('/api/select', { profile: p.id }), p.id === s.profile ? 'on' : '')));
+  $('note').textContent = cur.note;
+  $('variants').replaceChildren(...cur.variants.map((v) => btn(v.title, () => post('/api/select', { profile: s.profile, variant: v.id }), v.id === s.variant ? 'on' : '')));
+  $('vdesc').textContent = cur.variants.find((v) => v.id === s.variant).description;
+
+  const tools = [];
+  if (cur.rcon) tools.push(btn('🔌 Проверить RCON', () => post('/api/test-rcon')));
+  if (cur.mod) tools.push(
+    btn('📋 Что будет установлено', () => post('/api/mod-plan')),
+    btn('📦 Установить мод в папку игры', () => confirm('Скопировать файлы мода в папку игры?') && post('/api/install-mod')),
+    btn('🗑 Удалить мод', () => confirm('Удалить файлы мода из папки игры?') && post('/api/uninstall-mod')));
+  $('tools').replaceChildren(...tools);
+
+  $('rt').replaceChildren(...s.rules.map((r) => {
+    const tr = document.createElement('tr');
+    const cells = [`${EVENT[r.event] || r.event}${r.event === 'donation' ? ' от ' + r.min + '₽' : ''}`, (r.random ? 'случайно: ' : '') + r.effects.join(r.random ? ' / ' : ' + ')];
+    cells.forEach((text) => { const td = document.createElement('td'); td.textContent = text; tr.appendChild(td); });
+    const td = document.createElement('td');
+    td.appendChild(btn('▶ тест', () => post('/api/rule-test', { i: r.i }), 'sm'));
+    tr.appendChild(td);
+    return tr;
+  }));
+}
+
+function addLog(text) {
+  const l = $('log');
+  l.textContent += text + '\n';
+  l.scrollTop = l.scrollHeight;
+}
+function connect() {
+  const ws = new WebSocket(`ws://${location.host}/ws`);
+  ws.onmessage = (m) => {
+    const msg = JSON.parse(m.data);
+    if (msg.kind === 'log') addLog(msg.text);
+    if (msg.kind === 'state') render(msg);
+    if (msg.kind === 'exstate') renderExercise(msg.state);
+  };
+  ws.onclose = () => setTimeout(connect, 1500);
+}
+connect();
+</script>
+</body>
+</html>
