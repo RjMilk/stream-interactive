@@ -2,6 +2,15 @@
 
 Донаты, фоллоу, подписки и рейды из MiniChat (Twitch + YouTube + Streamix) превращаются в помехи на экране стримера и в события внутри игры.
 
+## Установка с нуля
+Нужны Windows 10/11 и [Node.js LTS](https://nodejs.org) (или `winget install OpenJS.NodeJS.LTS`).
+
+1. Скачай проект: `git clone https://github.com/RjMilk/stream-interactive.git` или кнопка Code → Download ZIP на GitHub.
+2. Запусти `start.bat`. При первом запуске он сам скачает зависимости (Electron и распознавание позы, около 150 МБ), это занимает пару минут.
+3. Если появилась ошибка «Electron failed to install correctly», удали папку `node_modules` и запусти `start.bat` ещё раз.
+
+Модель распознавания позы уже лежит в `public/models`, отдельно качать её не нужно.
+
 ## Запуск
 1. Запусти MiniChat (он отдаёт события на `ws://localhost:4848/Chat`).
 2. Запусти `start.bat`. Откроется панель, а поверх экрана встанет невидимый оверлей (мышь проходит сквозь него).
