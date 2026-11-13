@@ -3,8 +3,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const DIR = path.join(__dirname, 'profiles');
-const STATE = path.join(__dirname, 'state.json');
+const { DATA_DIR } = require('./paths');
+
+const DIR = path.join(DATA_DIR, 'profiles');
+const STATE = path.join(DATA_DIR, 'state.json');
 
 class Profiles {
   constructor() {

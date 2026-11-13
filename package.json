@@ -1,17 +1,76 @@
 {
   "name": "stream-interactive",
-  "version": "0.1.0",
-  "description": "Донаты/фоллоу/сабы/рейды из MiniChat -> помехи поверх игры у стримера",
+  "productName": "Stream Interactive",
+  "version": "0.2.0",
+  "description": "Донаты, фоллоу, подписки и рейды из MiniChat превращаются в помехи на экране стримера и события в игре",
+  "author": "RjMilk",
   "main": "main.js",
   "private": true,
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder --win --x64"
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "^1.2.2",
     "ws": "8.18.0"
   },
   "devDependencies": {
-    "electron": "33.2.1"
+    "electron": "33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.rjmilk.streaminteractive",
+    "productName": "Stream Interactive",
+    "copyright": "RjMilk",
+    "asar": false,
+    "electronDist": "node_modules/electron/dist",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "engine.js",
+      "profiles.js",
+      "minichat.js",
+      "paths.js",
+      "config.json",
+      "actions/**/*",
+      "profiles/**/*",
+      "mods/**/*",
+      "public/**/*",
+      "!**/*.map",
+      "!**/*.d.ts",
+      "!**/README.md"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Stream Interactive",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "language": "1049",
+      "installerLanguages": [
+        "ru_RU"
+      ],
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "artifactName": "Stream-Interactive-Setup-${version}.exe"
+    }
   }
 }

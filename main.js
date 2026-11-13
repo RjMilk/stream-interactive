@@ -1,5 +1,5 @@
 // Electron: прозрачный оверлей поверх игры + локальный сервер (панель, OBS-источник, WebSocket)
-const { app, BrowserWindow, screen, globalShortcut, desktopCapturer } = require('electron');
+const { app, BrowserWindow, screen, globalShortcut, desktopCapturer, shell } = require('electron');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -12,9 +12,21 @@ const { rconExec } = require('./actions/rcon');
 const { modPlan, installMod, uninstallMod } = require('./actions/modbridge');
 const keys = require('./actions/keys');
 
-const CONFIG_PATH = path.join(__dirname, 'config.json');
-const PUBLIC = path.join(__dirname, 'public');
-const LOG_DIR = path.join(__dirname, 'logs');
+const { APP_DIR, DATA_DIR, ensureData } = require('./paths');
+
+// Вторая копия программы не нужна: порт занят, а оверлей один. Просто показываем окно первой.
+let panelWin = null;
+if (!app.requestSingleInstanceLock()) { app.exit(0); return; }
+app.on('second-instance', () => {
+  if (!panelWin || panelWin.isDestroyed()) return;
+  if (panelWin.isMinimized()) panelWin.restore();
+  panelWin.focus();
+});
+
+ensureData();
+const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
+const PUBLIC = path.join(APP_DIR, 'public');
+const LOG_DIR = path.join(DATA_DIR, 'logs');
 fs.mkdirSync(LOG_DIR, { recursive: true });
 
 let config = loadConfig();
@@ -69,7 +81,7 @@ async function setCapture(on) {
 
 // ---------- HTTP: статика + API для панели ----------
 const VENDOR_URL = '/vendor/mediapipe/';
-const VENDOR_DIR = path.join(__dirname, 'node_modules', '@mediapipe', 'tasks-vision');
+const VENDOR_DIR = path.join(APP_DIR, 'node_modules', '@mediapipe', 'tasks-vision');
 const MIME = { '.mjs': 'text/javascript', '.wasm': 'application/wasm', '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.mp3': 'audio/mpeg', '.wav': 'audio/wav', '.ogg': 'audio/ogg', '.png': 'image/png', '.gif': 'image/gif', '.webm': 'video/webm' };
 
 function readBody(req) {
@@ -111,7 +123,7 @@ async function api(pathname, body) {
       return {};
     }
     case '/api/mod-plan': {
-      const plan = modPlan(profiles.active(), __dirname);
+      const plan = modPlan(profiles.active(), APP_DIR);
       for (const p of plan) {
         const status = p.missing ? `нельзя: нет ${p.missing} (${profiles.active().mod.requiresName})`
           : p.current ? 'уже установлен, актуален' : p.installed ? 'установлен, будет обновлён' : 'будет скопирован';
@@ -126,11 +138,12 @@ async function api(pathname, body) {
       return {};
     }
     case '/api/install-mod': {
-      const files = installMod(profiles.active(), __dirname);
+      const files = installMod(profiles.active(), APP_DIR);
       files.forEach((f) => log(`Мод скопирован: ${f}`));
       return {};
     }
     case '/api/capture': return setCapture(!!body.on);
+    case '/api/open-data': shell.openPath(DATA_DIR); return { dir: DATA_DIR };   // папка с config.json и profiles/
     case '/api/exercise': exerciseCommand(String(body.cmd)); return {};
     case '/api/exercise-state': setExerciseState({ cur: body.state?.cur || null, debt: body.state?.debt || {} }); return {};
     case '/api/camera':
@@ -226,6 +239,7 @@ function createOverlay() {
 function createPanel() {
   const win = new BrowserWindow({ width: 1040, height: 900, title: 'Stream Interactive — панель', autoHideMenuBar: true });
   win.loadURL(`http://127.0.0.1:${config.port}/panel.html`);
+  panelWin = win;
   win.on('closed', () => app.quit());
 }
 
